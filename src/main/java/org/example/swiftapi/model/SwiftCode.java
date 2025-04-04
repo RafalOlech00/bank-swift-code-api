@@ -2,11 +2,14 @@ package org.example.swiftapi.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotBlank;
+
 
 @Entity
 public class SwiftCode {
 
     @Id
+    @NotBlank(message = "Swift code must not be blank")
     private String swiftCode;
 
     private String bankName;

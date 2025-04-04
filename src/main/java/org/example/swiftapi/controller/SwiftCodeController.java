@@ -6,6 +6,8 @@ import org.example.swiftapi.service.SwiftCodeService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import jakarta.validation.Valid;
+
 
 
 import java.util.Map;
@@ -36,7 +38,7 @@ public class SwiftCodeController {
     }
 
     @PostMapping
-    public ResponseEntity<Map<String, String>> addSwiftCode(@RequestBody SwiftCode code) {
+    public ResponseEntity<Map<String, String>> addSwiftCode(@RequestBody @Valid SwiftCode code) {
         service.saveSingle(code);
         return ResponseEntity.ok(Map.of("message", "SWIFT code added successfully"));
     }
@@ -48,5 +50,10 @@ public class SwiftCodeController {
             return ResponseEntity.status(404).body(Map.of("message", "SWIFT code not found"));
         }
         return ResponseEntity.ok(Map.of("message", "SWIFT code deleted successfully"));
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<Map<String, String>> handleRuntimeException(RuntimeException e) {
+        return ResponseEntity.status(500).body(Map.of("error", e.getMessage()));
     }
 }
